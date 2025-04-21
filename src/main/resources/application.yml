@@ -4,11 +4,11 @@ spring:
     username: postgres
     password: postgres
     hikari:
-      schema: peopleapp
+      schema: gamingbuddies
   jpa:
     database-platform: org.hibernate.dialect.PosgreSQLInnoDBDialect
     generate-ddl: true
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: update
     properties:
