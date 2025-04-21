@@ -1,0 +1,134 @@
+openapi: 3.0.1
+info:
+  title: GamingBuddies API
+  description: API for managing users in the gaming buddies application
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/
+paths:
+  /users/new:
+    post:
+      summary: Create a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DimUser'
+      responses:
+        '201':
+          description: User created successfully
+          headers:
+            Location:
+              type: string
+              format: uri
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DimUser'
+  /users:
+    post:
+      summary: Search users with pagination
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+      schema:
+              type: integer
+              default: 10
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DimUserFilter'
+      responses:
+        '200':
+          description: List of users matching filter criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DimUser'
+  /users/{login}:
+    get:
+      summary: Get details about specific user by login
+      parameters:
+        - name: login
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DimUser'
+  /users/photo:
+    put:
+      summary: Upload profile photo for a user
+      parameters:
+        - name: userlogin
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: file
+          in: formData
+          required: true
+          type: file
+      responses:
+        '200':
+          description: Photo uploaded successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+  /users/image/{filename}:
+    get:
+      summary: Retrieve user's profile image
+      parameters:
+        - name: filename
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Image data returned successfully
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+components:
+  schemas:
+    DimUser:
+      type: object
+      properties:
+        login:
+          type: string
+        email:
+          type: string
+        # Add other fields as needed
+    DimUserFilter:
+      type: object
+      properties:
+        username:
+          type: string
+        minAge:
+          type: integer
+        maxAge:
+          type: integer
+        # Add other filtering options as needed

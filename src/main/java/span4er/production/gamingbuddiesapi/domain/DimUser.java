@@ -29,7 +29,9 @@ public class DimUser {
     private String username;
     @NonNull
     private Integer usertypeid;
+    @Column(length = 500)
     private String userpassword;
     private String userpicname;
+    @Column(length = 6000)
     private String userbio;
 }
