@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import span4er.production.gamingbuddiesapi.domain.GameSession;
 import span4er.production.gamingbuddiesapi.domain.filters.GameSessionFilter;
 import span4er.production.gamingbuddiesapi.repo.GameSessionRepo;
+import span4er.production.gamingbuddiesapi.repo.projections.GameSessionInfoForSearch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +30,10 @@ public class GameSessionService {
         return gameSessionRepo.findByGamesessionid(id).orElseThrow(() -> new RuntimeException("Gamesession not found"));
     }
 
-    public Page<GameSession> searchGameSession(int page, int size, GameSessionFilter searchBody) {
+    public Page<GameSessionInfoForSearch> searchGameSession(int page, int size, GameSessionFilter searchBody) {
         Specification<GameSession> specification = buildSpecification(searchBody);
         Pageable pageable = PageRequest.of(page, size); // Создаем объект Pageable
-        return gameSessionRepo.findAll(specification, pageable);
+        return gameSessionRepo.findAllProjection(specification, pageable);
     }
 
     private Specification<GameSession> buildSpecification(GameSessionFilter filter) {
