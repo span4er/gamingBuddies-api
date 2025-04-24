@@ -27,7 +27,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-import static span4er.production.gamingbuddiesapi.constant.Constant.PHOTO_DIRECTORY;
+import static span4er.production.gamingbuddiesapi.constant.Constant.USER_AVATAR_DIRECTORY;
 
 @Service
 @Slf4j
@@ -83,7 +83,7 @@ public class DimUserService {
     private final BiFunction<String, MultipartFile, String> photoFunction = (id, image) -> {
         String filename = id + fileExtension.apply(image.getOriginalFilename());
         try {
-            Path fileStorageLocation = Paths.get(PHOTO_DIRECTORY).toAbsolutePath().normalize();
+            Path fileStorageLocation = Paths.get(USER_AVATAR_DIRECTORY).toAbsolutePath().normalize();
             if(!Files.exists(fileStorageLocation)) { Files.createDirectories(fileStorageLocation); }
             Files.copy(image.getInputStream(), fileStorageLocation.resolve(filename), REPLACE_EXISTING);
             return ServletUriComponentsBuilder
