@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: GamingBuddies API
-  description: API for managing users in the gaming buddies application
+  description: API for gaming buddies service
   version: 1.0.0
 servers:
   - url: http://localhost:8080/
@@ -112,7 +112,96 @@ paths:
               schema:
                 type: string
                 format: binary
-components:
+  /events/{id}:
+    get:
+      summary: Get details about specific gaming event by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: evens information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DimUser'
+  /events:
+    post:
+      summary: search gaming event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DimUserFilter'
+      responses:
+        '200':
+          description: events information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DimUser'
+  /library:
+    post:
+      summary: search game library
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DimUserFilter'
+      responses:
+        '200':
+          description: events information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DimUser'
+  /library/game/{id}:
+    get:
+      summary: Get details about game from library by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: userid
+          in: header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: game information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DimUser'
+  /library/game/image/{filename}:
+    get:
+      summary: Retrieve game's image
+      parameters:
+        - name: filename
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Image data returned successfully
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+  components:
   schemas:
     DimUser:
       type: object
