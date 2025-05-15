@@ -26,15 +26,13 @@ public class DimUserResource {
 
     @PostMapping("/new")
     public ResponseEntity<DimUser> createUser(@RequestBody DimUser dimUser) {
-        //return ResponseEntity.ok().body(contactService.createContact(contact));
         return ResponseEntity.created(URI.create("/users/userID")).body(dimUserService.createDimUser(dimUser));
     }
 
-    @PostMapping
+    @GetMapping
     public ResponseEntity<Page<DimUser>> getUsers(@RequestParam(value = "page", defaultValue = "0") int page,
-                                                     @RequestParam(value = "size", defaultValue = "10") int size,
-                                                     @RequestBody DimUserFilter searchBody) {
-        return ResponseEntity.ok().body(dimUserService.searchDimUser(page, size, searchBody));
+                                                     @RequestParam(value = "size", defaultValue = "10") int size) {
+        return ResponseEntity.ok().body(dimUserService.searchDimUser(page, size));
     }
 
     @GetMapping("/{login}")

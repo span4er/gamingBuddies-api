@@ -6,28 +6,8 @@ info:
 servers:
   - url: http://localhost:8080/
 paths:
-  /users/new:
-    post:
-      summary: Create a new user
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/DimUser'
-      responses:
-        '201':
-          description: User created successfully
-          headers:
-            Location:
-              type: string
-              format: uri
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DimUser'
   /users:
-    post:
+    get:
       summary: Search users with pagination
       parameters:
         - name: page
@@ -38,23 +18,59 @@ paths:
         - name: size
           in: query
       schema:
-              type: integer
-              default: 10
+        type: integer
+        default: 10
       requestBody:
         required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/DimUserFilter'
       responses:
         '200':
           description: List of users matching filter criteria
+    post:
+      summary: Create a new user
+      requestBody:
+        required: true
+      responses:
+        '200':
+          description: User created successfully
+          headers:
+            Location:
+              type: string
+              format: uri
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/DimUser'
+                {
+                  type: object,
+                  properties: {
+                    username: {
+                      type: string,
+                      description: Имя пользователя
+                    },
+                    userlogin: {
+                      type: string,
+                      description: Логин пользователя
+                    },
+                    userbio: {
+                      type: string,
+                      description: Биография пользователя
+                    },
+                    usertypeid: {
+                      type: string,
+                      description: Идентификатор типа пользователя
+                    },
+                    userpicname: {
+                      type: string,
+                      description: Имя файла изображения пользователя
+                    }
+                  },
+                  required: [
+                    username,
+                    userlogin,
+                    userbio,
+                    usertypeid,
+                    userpicname
+                  ]
+                }
   /users/{login}:
     get:
       summary: Get details about specific user by login
@@ -67,10 +83,6 @@ paths:
       responses:
         '200':
           description: User information retrieved successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DimUser'
   /users/photo:
     put:
       summary: Upload profile photo for a user
@@ -112,6 +124,159 @@ paths:
               schema:
                 type: string
                 format: binary
+  /events:
+    get:
+      summary: search gaming event
+      parameters:
+        - name: gameId
+          in: query
+          schema:
+            type: integer
+        - name: createUserLogin
+          in: query
+          schema:
+            type: string
+        - name: platformIds
+          in: query
+          schema:
+            type: array
+            items: {
+              type: string
+            }
+      responses:
+        '200':
+          description: events information retrieved successfully
+          content:
+            application/json:
+              schema:
+                {
+                  "$ref": "#/components/schemas/SessionsResponse"
+                }
+        '201':
+          description: request success. No data for game sessions
+
+    post:
+      summary: create game session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              {
+                type: object,
+                properties: {
+                  createDttm: {
+                    type: string,
+                    format: date-time,
+                    description: Дата и время создания сессии
+                  },
+                  sessionDescription: {
+                    type: string,
+                    description: Описание сессии
+                  },
+                  languageShort: {
+                    type: string,
+                    description: Короткое обозначение языка
+                  },
+                  categoryName: {
+                    type: string,
+                    description: Название категории
+                  },
+                  startDttm: {
+                    type: string,
+                    format: date-time,
+                    description: Дата и время начала сессии
+                  },
+                  endDttm: {
+                    type: string,
+                    format: date-time,
+                    description: Дата и время окончания сессии
+                  },
+                  capacityNum: {
+                    type: integer,
+                    description: Количество участников
+                  },
+                  gamingPlatform: {
+                    type: string,
+                    description: Платформа для игры
+                  },
+                  gameId: {
+                    type: integer,
+                    description: Идентификатор игры
+                  },
+                  sessionName: {
+                    type: string,
+                    description: Название сессии
+                  }
+                },
+                required: [
+                  createDttm,
+                  sessionStatusId,
+                  createUserPicName,
+                  sessionStatusName,
+                  sessionDescription,
+                  languageShort,
+                  categoryName,
+                  gameSessionId,
+                  createUserLogin,
+                  endDttm,
+                  capacityNum,
+                  gamingPlatform,
+                  gameId,
+                  sessionName,
+                  startDttm,
+                  gamePicName
+                ]
+              }
+      responses:
+        '200':
+          description: events information retrieved successfully
+  /events/actual:
+    get:
+      summary: search gaming event for actual page
+      parameters:
+        - name: userid
+          in: header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: events information retrieved successfully
+          content:
+            application/json:
+              schema:
+                {
+                  type: object,
+                  properties: {
+                    gameId: {
+                      type: integer,
+                      description: Идентификатор игры
+                    }
+                  }
+                }
+  /events/favorites:
+    get:
+      summary: search gaming event for favorites page
+      parameters:
+        - name: userid
+          in: header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: events information retrieved successfully
+          content:
+            application/json:
+              schema:
+                {
+                  type: object,
+                  properties: {
+                    gameId: {
+                      type: integer,
+                      description: Идентификатор игры
+                    }
+                  }
+                }
   /events/{id}:
     get:
       summary: Get details about specific gaming event by id
@@ -124,42 +289,112 @@ paths:
       responses:
         '200':
           description: evens information retrieved successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DimUser'
-  /events:
-    post:
-      summary: search gaming event
+    put:
+      summary: Update specific gaming event by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DimUserFilter'
+              {
+                type: object,
+                properties: {
+                  createDttm: {
+                    type: string,
+                    format: date-time,
+                    description: Дата и время создания сессии
+                  },
+                  sessionDescription: {
+                    type: string,
+                    description: Описание сессии
+                  },
+                  languageShort: {
+                    type: string,
+                    description: Короткое обозначение языка
+                  },
+                  categoryName: {
+                    type: string,
+                    description: Название категории
+                  },
+                  startDttm: {
+                    type: string,
+                    format: date-time,
+                    description: Дата и время начала сессии
+                  },
+                  endDttm: {
+                    type: string,
+                    format: date-time,
+                    description: Дата и время окончания сессии
+                  },
+                  capacityNum: {
+                    type: integer,
+                    description: Количество участников
+                  },
+                  gamingPlatform: {
+                    type: string,
+                    description: Платформа для игры
+                  },
+                  gameId: {
+                    type: integer,
+                    description: Идентификатор игры
+                  },
+                  sessionName: {
+                    type: string,
+                    description: Название сессии
+                  }
+                },
+                required: [
+                  createDttm,
+                  sessionStatusId,
+                  createUserPicName,
+                  sessionStatusName,
+                  sessionDescription,
+                  languageShort,
+                  categoryName,
+                  gameSessionId,
+                  createUserLogin,
+                  endDttm,
+                  capacityNum,
+                  gamingPlatform,
+                  gameId,
+                  sessionName,
+                  startDttm,
+                  gamePicName
+                ]
+              }
       responses:
         '200':
-          description: events information retrieved successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DimUser'
+          description: evens information retrieved successfully
+  /events/{id}/join:
+    post:
+      summary: Join gameSession
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: userid
+          in: header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: request success. Joined game session
+        '201':
+          description: request success. Can't join game session
   /library:
-    post:
+    get:
       summary: search game library
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/DimUserFilter'
       responses:
         '200':
           description: events information retrieved successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DimUser'
   /library/game/{id}:
     get:
       summary: Get details about game from library by id
@@ -176,10 +411,21 @@ paths:
       responses:
         '200':
           description: game information retrieved successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DimUser'
+    put:
+      summary: update details about game from library by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: userid
+          in: header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: game information updated successfully
   /library/game/image/{filename}:
     get:
       summary: Retrieve game's image
@@ -201,23 +447,174 @@ paths:
               schema:
                 type: string
                 format: binary
-  components:
-  schemas:
-    DimUser:
-      type: object
-      properties:
-        login:
-          type: string
-        email:
-          type: string
-        # Add other fields as needed
-    DimUserFilter:
-      type: object
-      properties:
-        username:
-          type: string
-        minAge:
+  /report:
+    post:
+      summary: leave report for user
+      parameters:
+        - name: userLogin
+          in: header
+          schema:
+            type: string
+        - name: userReportedLogin
+          in: header
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              {
+                type: object,
+                properties: {
+                  reportDescription: {
+                    type: string,
+                    description: Описание жалобы
+                  },
+                  reportReasonId: {
+                    type: integer,
+                    description: Причина жалобы
+                  },
+                }
+              }
+      responses:
+        '200':
+          description: events information retrieved successfully
+components: {
+  schemas: {
+    SessionsResponse: {
+      type: object,
+      properties: {
+        content: {
+          type: array,
+          items: {
+            "$ref": "#/components/schemas/SessionItem"
+          }
+        },
+        pageable: {
+          "$ref": "#/components/schemas/PageableInfo"
+        },
+        last: {
+          type: boolean
+        },
+        totalElements: {
           type: integer
-        maxAge:
+        },
+        totalPages: {
           type: integer
-        # Add other filtering options as needed
+        },
+        size: {
+          type: integer
+        },
+        number: {
+          type: integer
+        },
+        sort: {
+          "$ref": "#/components/schemas/SortInfo"
+        },
+        first: {
+          type: boolean
+        },
+        numberOfElements: {
+          type: integer
+        },
+        empty: {
+          type: boolean
+        }
+      }
+    },
+    SessionItem: {
+      type: object,
+      properties: {
+        createDttm: {
+          type: string,
+          format: date-time
+        },
+        startDttm: {
+          type: string,
+          format: date-time
+        },
+        endDttm: {
+          type: string,
+          format: date-time
+        },
+        capacityNum: {
+          type: integer
+        },
+        categoryName: {
+          type: string
+        },
+        gameSessionId: {
+          type: integer
+        },
+        createUserLogin: {
+          type: string
+        },
+        sessionName: {
+          type: string
+        },
+        gameId: {
+          type: integer
+        },
+        gamePicName: {
+          type: string
+        },
+        languageShort: {
+          type: string
+        },
+        gamingPlatform: {
+          type: string
+        },
+        sessionStatusId: {
+          type: integer
+        },
+        createUserPicName: {
+          type: string
+        },
+        sessionStatusName: {
+          type: string
+        },
+        sessionDescription: {
+          type: string
+        }
+      }
+    },
+    PageableInfo: {
+      type: object,
+      properties: {
+        pageNumber: {
+          type: integer
+        },
+        pageSize: {
+          type: integer
+        },
+        sort: {
+          "$ref": "#/components/schemas/SortInfo"
+        },
+        offset: {
+          type: integer
+        },
+        paged: {
+          type: boolean
+        },
+        unpaged: {
+          type: boolean
+        }
+      }
+    },
+    SortInfo: {
+      type: object,
+      properties: {
+        empty: {
+          type: boolean
+        },
+        sorted: {
+          type: boolean
+        },
+        unsorted: {
+          type: boolean
+        }
+      }
+    }
+  }
+}

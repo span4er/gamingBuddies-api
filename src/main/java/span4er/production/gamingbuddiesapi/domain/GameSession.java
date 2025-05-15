@@ -19,6 +19,10 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_DEFAULT;
 @Table(name = "gamesession")
 public class GameSession {
     @Id
+    @SequenceGenerator(name = "gamesession_gamesessionid",
+            sequenceName = "gamesession_gamesessionid",
+            initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gamesession_gamesessionid")
     @Column(name = "gamesessionid", unique = true, updatable = false)
     private Long gamesessionid;
     @ManyToOne

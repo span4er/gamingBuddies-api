@@ -28,7 +28,7 @@ public class DimGameService {
         return dimGameRepo.findDimGameByGameid(gameId).orElseThrow(() -> new RuntimeException("game not found"));
     }
 
-    public Page<DimGame> searchDimGame(int page, int size, GameSessionFilter searchBody) {
+    public Page<DimGame> searchDimGame(int page, int size) {
         //Specification<GameSession> specification = buildSpecification(searchBody);
         Pageable pageable = PageRequest.of(page, size); // Создаем объект Pageable
         return dimGameRepo.findAll(pageable);

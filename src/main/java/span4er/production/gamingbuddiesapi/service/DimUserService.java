@@ -37,10 +37,10 @@ public class DimUserService {
     private final DimUserRepo dimUserRepo;
 
 
-    public Page<DimUser> searchDimUser(int page, int size, DimUserFilter searchBody) {
-        Specification<DimUser> specification = buildSpecification(searchBody);
+    public Page<DimUser> searchDimUser(int page, int size) {
+//        Specification<DimUser> specification = buildSpecification(searchBody);
         Pageable pageable = PageRequest.of(page, size); // Создаем объект Pageable
-        return dimUserRepo.findAll(specification, pageable);
+        return dimUserRepo.findAll(pageable);
     }
 
     private Specification<DimUser> buildSpecification(DimUserFilter filter) {

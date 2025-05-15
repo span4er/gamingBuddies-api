@@ -30,10 +30,14 @@ public class GameSessionService {
         return gameSessionRepo.findByGamesessionid(id).orElseThrow(() -> new RuntimeException("Gamesession not found"));
     }
 
-    public Page<GameSessionInfoForSearch> searchGameSession(int page, int size, GameSessionFilter searchBody) {
-        Specification<GameSession> specification = buildSpecification(searchBody);
+    public Page<GameSessionInfoForSearch> searchGameSession(int page, int size) {
+//        Specification<GameSession> specification = buildSpecification(searchBody);
         Pageable pageable = PageRequest.of(page, size); // Создаем объект Pageable
-        return gameSessionRepo.findAllProjection(specification, pageable);
+        return gameSessionRepo.findAllProjection(pageable);
+    }
+
+    public long createGameSession(GameSession gameSession) {
+        return gameSessionRepo.save(gameSession).getGamesessionid();
     }
 
     private Specification<GameSession> buildSpecification(GameSessionFilter filter) {

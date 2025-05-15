@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface GameSessionRepo extends JpaRepository<GameSession, String>, JpaSpecificationExecutor<GameSession> {
+public interface GameSessionRepo extends JpaRepository<GameSession, Long>, JpaSpecificationExecutor<GameSession> {
     Optional<GameSession> findByGamesessionid(Long id);
 
     @Query("select \n" +
@@ -35,5 +35,5 @@ public interface GameSessionRepo extends JpaRepository<GameSession, String>, Jpa
                 "gs.sessionstatus.name as sessionStatusName,\n" +
                 "gs.platform.name as gamingPlatform\n"+
                 "from GameSession gs")
-    Page<GameSessionInfoForSearch> findAllProjection(Specification<GameSession> spec, Pageable pageable);
+    Page<GameSessionInfoForSearch> findAllProjection(Pageable pageable);
 }

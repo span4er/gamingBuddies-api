@@ -35,10 +35,9 @@ public class DimGameResource {
         return ResponseEntity.ok().body(dimGameService.getGame(id));
     }
 
-    @PostMapping
+    @GetMapping
     public ResponseEntity<Page<DimGame>> searchDimGame(@RequestParam(value = "page", defaultValue = "0") int page,
-                                                                             @RequestParam(value = "size", defaultValue = "10") int size,
-                                                                             @RequestBody GameSessionFilter searchBody) {
-        return ResponseEntity.ok().body(dimGameService.searchDimGame(page, size, searchBody));
+                                                                             @RequestParam(value = "size", defaultValue = "10") int size) {
+        return ResponseEntity.ok().body(dimGameService.searchDimGame(page, size));
     }
 }

@@ -1,10 +1,7 @@
 package span4er.production.gamingbuddiesapi.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
@@ -20,7 +17,10 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_DEFAULT;
 @Table(name = "dimuser")
 public class DimUser {
     @Id
-    @UuidGenerator
+    @SequenceGenerator(name = "dimuser_userid",
+            sequenceName = "dimuser_userid",
+            initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dimuser_userid")
     @Column(name = "userid", unique = true, updatable = false)
     private String userid;
     @NonNull
