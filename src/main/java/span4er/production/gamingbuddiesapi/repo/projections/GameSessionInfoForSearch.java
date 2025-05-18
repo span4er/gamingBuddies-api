@@ -1,10 +1,6 @@
 package span4er.production.gamingbuddiesapi.repo.projections;
 
-import span4er.production.gamingbuddiesapi.domain.DimGame;
-import span4er.production.gamingbuddiesapi.domain.DimUser;
-
 import java.time.LocalDateTime;
-import java.util.List;
 
 public interface GameSessionInfoForSearch {
     Long getGameSessionId();

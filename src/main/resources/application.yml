@@ -31,3 +31,6 @@ server:
     path: /user/error
     whitelabel:
       enabled: false
+token:
+  signing:
+    key: ${TOKEN_SIGNING_KEY}

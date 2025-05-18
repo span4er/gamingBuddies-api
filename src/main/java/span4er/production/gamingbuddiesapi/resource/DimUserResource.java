@@ -5,8 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import span4er.production.gamingbuddiesapi.domain.DimUser;
-import span4er.production.gamingbuddiesapi.domain.filters.DimUserFilter;
+import span4er.production.gamingbuddiesapi.domain.model.DimUser;
 import span4er.production.gamingbuddiesapi.service.DimUserService;
 
 import java.io.IOException;
@@ -24,7 +23,7 @@ import static span4er.production.gamingbuddiesapi.constant.Constant.USER_AVATAR_
 public class DimUserResource {
     private final DimUserService dimUserService;
 
-    @PostMapping("/new")
+    @PostMapping
     public ResponseEntity<DimUser> createUser(@RequestBody DimUser dimUser) {
         return ResponseEntity.created(URI.create("/users/userID")).body(dimUserService.createDimUser(dimUser));
     }
@@ -44,8 +43,6 @@ public class DimUserResource {
     public ResponseEntity<String> uploadPhoto(@RequestParam("userlogin") String userLogin, @RequestParam("file") MultipartFile file) {
         return ResponseEntity.ok().body(dimUserService.uploadPhoto(userLogin, file));
     }
-
-
 
     @GetMapping(path = "/image/{filename}", produces = { IMAGE_PNG_VALUE, IMAGE_JPEG_VALUE })
     public byte[] getPhoto(@PathVariable("filename") String filename) throws IOException {

@@ -10,7 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import span4er.production.gamingbuddiesapi.domain.GameSession;
+import span4er.production.gamingbuddiesapi.domain.model.GameSession;
 import span4er.production.gamingbuddiesapi.domain.filters.GameSessionFilter;
 import span4er.production.gamingbuddiesapi.repo.GameSessionRepo;
 import span4er.production.gamingbuddiesapi.repo.projections.GameSessionInfoForSearch;
@@ -31,7 +31,6 @@ public class GameSessionService {
     }
 
     public Page<GameSessionInfoForSearch> searchGameSession(int page, int size) {
-//        Specification<GameSession> specification = buildSpecification(searchBody);
         Pageable pageable = PageRequest.of(page, size); // Создаем объект Pageable
         return gameSessionRepo.findAllProjection(pageable);
     }

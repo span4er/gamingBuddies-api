@@ -11,8 +11,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import span4er.production.gamingbuddiesapi.domain.Contact;
-import span4er.production.gamingbuddiesapi.domain.DimUser;
+import span4er.production.gamingbuddiesapi.domain.model.DimUser;
 import span4er.production.gamingbuddiesapi.domain.filters.DimUserFilter;
 import span4er.production.gamingbuddiesapi.repo.DimUserRepo;
 
@@ -61,7 +60,7 @@ public class DimUserService {
     }
 
     public DimUser getDimUser(String login) {
-        return dimUserRepo.findByUserlogin(login).orElseThrow(() -> new RuntimeException("User not found"));
+        return dimUserRepo.findByUsername(login).orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     public DimUser createDimUser(DimUser dimUser) {
