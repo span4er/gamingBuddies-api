@@ -1,4 +1,4 @@
-package span4er.production.gamingbuddiesapi.domain;
+package span4er.production.gamingbuddiesapi.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.annotation.Nullable;

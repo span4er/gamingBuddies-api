@@ -1,9 +1,8 @@
-package span4er.production.gamingbuddiesapi.domain;
+package span4er.production.gamingbuddiesapi.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.Reference;
 
 import java.time.LocalDateTime;
 import java.util.Set;

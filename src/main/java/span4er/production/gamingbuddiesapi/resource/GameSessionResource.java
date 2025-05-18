@@ -5,15 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import span4er.production.gamingbuddiesapi.domain.*;
 import span4er.production.gamingbuddiesapi.domain.dto.GameSessionDTO;
-import span4er.production.gamingbuddiesapi.domain.filters.GameSessionFilter;
+import span4er.production.gamingbuddiesapi.domain.model.GameSession;
 import span4er.production.gamingbuddiesapi.repo.*;
 import span4er.production.gamingbuddiesapi.repo.projections.GameSessionInfoForSearch;
 import span4er.production.gamingbuddiesapi.service.GameSessionService;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController

@@ -1,4 +1,4 @@
-package span4er.production.gamingbuddiesapi.domain;
+package span4er.production.gamingbuddiesapi.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.Column;
@@ -18,12 +18,10 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_DEFAULT;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(NON_DEFAULT)
-@Table(name = "dimsessionslanguages")
-public class DimSessionLanguages {
+@Table(name = "dimgamingplatform")
+public class DimGamingPlatform {
     @Id
-    @Column(name = "languageid", unique = true, updatable = false)
-    private Integer languageId;
+    @Column(name = "platformid", unique = true, updatable = false)
+    private Integer platformId;
     private String name;
-    @Column(name = "nameshort", length = 10)
-    private String nameShort;
 }

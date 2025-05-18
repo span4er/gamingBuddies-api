@@ -6,15 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import span4er.production.gamingbuddiesapi.domain.DimGame;
-import span4er.production.gamingbuddiesapi.domain.DimUser;
-import span4er.production.gamingbuddiesapi.domain.GameSession;
-import span4er.production.gamingbuddiesapi.domain.filters.GameSessionFilter;
+import span4er.production.gamingbuddiesapi.domain.model.DimGame;
+import span4er.production.gamingbuddiesapi.domain.model.GameSession;
 import span4er.production.gamingbuddiesapi.repo.DimGameRepo;
-import span4er.production.gamingbuddiesapi.repo.DimUserRepo;
-import span4er.production.gamingbuddiesapi.repo.projections.GameSessionInfoForSearch;
 
 @Service
 @Slf4j
@@ -29,8 +24,11 @@ public class DimGameService {
     }
 
     public Page<DimGame> searchDimGame(int page, int size) {
-        //Specification<GameSession> specification = buildSpecification(searchBody);
-        Pageable pageable = PageRequest.of(page, size); // Создаем объект Pageable
+        Pageable pageable = PageRequest.of(page, size);
         return dimGameRepo.findAll(pageable);
+    }
+
+    public DimGame updateGame (DimGame game) {
+        return dimGameRepo.save(game);
     }
 }

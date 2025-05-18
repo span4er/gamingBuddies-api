@@ -3,14 +3,14 @@ package span4er.production.gamingbuddiesapi.resource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import span4er.production.gamingbuddiesapi.domain.DimGame;
-import span4er.production.gamingbuddiesapi.domain.GameSession;
-import span4er.production.gamingbuddiesapi.domain.filters.GameSessionFilter;
-import span4er.production.gamingbuddiesapi.repo.projections.GameSessionInfoForSearch;
+import span4er.production.gamingbuddiesapi.domain.dto.DimGameDTO;
+import span4er.production.gamingbuddiesapi.domain.model.DimGame;
 import span4er.production.gamingbuddiesapi.service.DimGameService;
 
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -31,9 +31,17 @@ public class DimGameResource {
     }
 
     @GetMapping("/game/{id}")
-    public ResponseEntity<DimGame> getGame(@PathVariable(value = "id") Long id){
+    public ResponseEntity<DimGame> getGame(@PathVariable(value = "id") Long id, @RequestHeader(value = "Authorization") String authToken){
         return ResponseEntity.ok().body(dimGameService.getGame(id));
     }
+
+    @PostMapping("/game/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<DimGame> updateGame(@PathVariable(value = "id") Long id,
+                                              @RequestBody DimGameDTO game){
+        return ResponseEntity.created(URI.create("/library/game/gameId")).body(dimGameService.updateGame(game.convertToDimGame(id)));
+    }
+
 
     @GetMapping
     public ResponseEntity<Page<DimGame>> searchDimGame(@RequestParam(value = "page", defaultValue = "0") int page,

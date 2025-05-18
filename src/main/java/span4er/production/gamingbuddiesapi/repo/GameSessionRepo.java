@@ -2,15 +2,13 @@ package span4er.production.gamingbuddiesapi.repo;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import span4er.production.gamingbuddiesapi.domain.GameSession;
+import span4er.production.gamingbuddiesapi.domain.model.GameSession;
 import span4er.production.gamingbuddiesapi.repo.projections.GameSessionInfoForSearch;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -21,7 +19,7 @@ public interface GameSessionRepo extends JpaRepository<GameSession, Long>, JpaSp
                 "gs.gamesessionid as gameSessionId,\n" +
                 "gs.sessiondescription as sessionDescription,\n" +
                 "gs.name as sessionName,\n" +
-                "gs.createuser.userlogin as createUserLogin,\n" +
+                "gs.createuser.username as createUserLogin,\n" +
                 "gs.createuser.userpicname as createUserPicName,\n" +
                 "gs.createdttm as createDttm,\n" +
                 "gs.startdttm as startDttm,\n" +

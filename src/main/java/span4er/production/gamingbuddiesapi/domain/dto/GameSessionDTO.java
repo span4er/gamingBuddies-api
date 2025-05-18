@@ -1,12 +1,9 @@
 package span4er.production.gamingbuddiesapi.domain.dto;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import span4er.production.gamingbuddiesapi.domain.*;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Setter
 @Getter
