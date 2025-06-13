@@ -31,7 +31,7 @@ public class DimGameResource {
     }
 
     @GetMapping("/game/{id}")
-    public ResponseEntity<DimGame> getGame(@PathVariable(value = "id") Long id, @RequestHeader(value = "Authorization") String authToken){
+    public ResponseEntity<DimGame> getGame(@PathVariable(value = "id") Long id, @RequestHeader(value = "Authorization", required = false) String authToken){
         return ResponseEntity.ok().body(dimGameService.getGame(id));
     }
 
@@ -41,7 +41,6 @@ public class DimGameResource {
                                               @RequestBody DimGameDTO game){
         return ResponseEntity.created(URI.create("/library/game/gameId")).body(dimGameService.updateGame(game.convertToDimGame(id)));
     }
-
 
     @GetMapping
     public ResponseEntity<Page<DimGame>> searchDimGame(@RequestParam(value = "page", defaultValue = "0") int page,

@@ -1,6 +1,7 @@
 package span4er.production.gamingbuddiesapi.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,17 +28,21 @@ public class AuthenticationService {
      * @param request данные пользователя
      * @return токен
      */
-    public JwtAuthenticationResponse signUp(SignUpRequest request) {
-        final DimUserType COMMON_USER_TYPE = dimUserTypeRepo.getReferenceById(1);
-        var user = new DimUser();
-        user.setUsername(request.getUsername());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setUsertypeId(COMMON_USER_TYPE);
+    public ResponseEntity<JwtAuthenticationResponse> signUp(SignUpRequest request) {
+        try {
+            final DimUserType COMMON_USER_TYPE = dimUserTypeRepo.getReferenceById(1);
+            var user = new DimUser();
+            user.setUsername(request.getUsername());
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+            user.setUsertypeId(COMMON_USER_TYPE);
 
-        userService.createDimUser(user);
+            userService.createDimUser(user);
 
-        var jwt = jwtService.generateToken(user);
-        return new JwtAuthenticationResponse(jwt);
+            var jwt = jwtService.generateToken(user);
+            return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new JwtAuthenticationResponse(e.getMessage()));
+        }
     }
 
     /**
@@ -46,16 +51,20 @@ public class AuthenticationService {
      * @param request данные пользователя
      * @return токен
      */
-    public JwtAuthenticationResponse signIn(SignInRequest request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                request.getUsername(),
-                request.getPassword()
-        ));
+    public ResponseEntity<JwtAuthenticationResponse> signIn(SignInRequest request) {
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    request.getUsername(),
+                    request.getPassword()
+            ));
 
-        var user = userService
-                .getDimUser(request.getUsername());
+            var user = userService
+                    .getDimUser(request.getUsername());
 
-        var jwt = jwtService.generateToken(user);
-        return new JwtAuthenticationResponse(jwt);
+            var jwt = jwtService.generateToken(user);
+            return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new JwtAuthenticationResponse(e.getMessage()));
+        }
     }
 }

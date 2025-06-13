@@ -10,11 +10,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import span4er.production.gamingbuddiesapi.domain.dto.GameSessionDTO;
 import span4er.production.gamingbuddiesapi.domain.model.GameSession;
 import span4er.production.gamingbuddiesapi.domain.filters.GameSessionFilter;
-import span4er.production.gamingbuddiesapi.repo.GameSessionRepo;
+import span4er.production.gamingbuddiesapi.repo.*;
 import span4er.production.gamingbuddiesapi.repo.projections.GameSessionInfoForSearch;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -25,6 +27,12 @@ import java.util.Locale;
 @RequiredArgsConstructor
 public class GameSessionService {
     private final GameSessionRepo gameSessionRepo;
+    private final DimGameRepo dimGameRepo;
+    private final DimGamingPlatformRepo dimGamingPlatformRepo;
+    private final DimUserRepo dimUserRepo;
+    private final DimGameSessionStatusRepo dimGameSessionStatusRepo;
+    private final DimSessionCategoryRepo dimSessionCategoryRepo;
+    private final DimSessionLanguagesRepo dimSessionLanguagesRepo;
 
     public GameSession getGameSession(Long id) {
         return gameSessionRepo.findByGamesessionid(id).orElseThrow(() -> new RuntimeException("Gamesession not found"));
@@ -35,8 +43,28 @@ public class GameSessionService {
         return gameSessionRepo.findAllProjection(pageable);
     }
 
-    public long createGameSession(GameSession gameSession) {
-        return gameSessionRepo.save(gameSession).getGamesessionid();
+    public long createGameSession(GameSessionDTO gameSession) {
+        GameSession newGameSession = convertToGameSession(gameSession);
+        return gameSessionRepo.save(newGameSession).getGamesessionid();
+    }
+
+    private GameSession convertToGameSession(GameSessionDTO gameSessionDTO){
+        GameSession gameSessionEntity = new GameSession();
+
+        gameSessionEntity.setGame(dimGameRepo.getReferenceById(String.valueOf(gameSessionDTO.getGameid())));
+        gameSessionEntity.setPlatform(dimGamingPlatformRepo.getReferenceById(gameSessionDTO.getPlatformid()));
+        gameSessionEntity.setCreateuser(dimUserRepo.getReferenceById(String.valueOf(gameSessionDTO.getCreateuserid())));
+        gameSessionEntity.setCreatedttm(LocalDateTime.now());
+        gameSessionEntity.setStartdttm(gameSessionDTO.getStartdttm());
+        gameSessionEntity.setEnddttm(gameSessionDTO.getEnddttm());
+        gameSessionEntity.setSessionstatus(dimGameSessionStatusRepo.getReferenceById(gameSessionDTO.getSessionstatusid()));
+        gameSessionEntity.setCapacitynum(gameSessionDTO.getCapacitynum());
+        gameSessionEntity.setCategory(dimSessionCategoryRepo.getReferenceById(gameSessionDTO.getCategoryid()));
+        gameSessionEntity.setLanguage(dimSessionLanguagesRepo.getReferenceById(gameSessionDTO.getLanguageid()));
+        gameSessionEntity.setSessiondescription(gameSessionDTO.getSessiondescription());
+        gameSessionEntity.setName(gameSessionDTO.getName());
+
+        return gameSessionEntity;
     }
 
     private Specification<GameSession> buildSpecification(GameSessionFilter filter) {

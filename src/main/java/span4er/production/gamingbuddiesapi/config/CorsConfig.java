@@ -31,11 +31,12 @@ public class CorsConfig {
     public CorsFilter corsFilter(){
         var urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
         var corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000","http://localhost:3200", "http://localhost:4200","http://192.168.0.181:3000", "http://192.168.0.181:3200"));
         corsConfiguration.setAllowedHeaders(List.of(ORIGIN, ACCESS_CONTROL_ALLOW_ORIGIN, CONTENT_TYPE, ACCEPT, AUTHORIZATION, X_REQUESTED_WITH, ACCESS_CONTROL_REQUEST_METHOD, ACCESS_CONTROL_REQUEST_HEADERS, ACCESS_CONTROL_ALLOW_CREDENTIALS));
+        corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000","http://localhost:3200", "http://localhost:4200","http://192.168.0.181:3000", "http://192.168.0.181:3200"));
+        corsConfiguration.setAllowedOriginPatterns(List.of("http://localhost:3000","http://localhost:3200", "http://localhost:4200","http://192.168.0.181:3000", "http://192.168.0.181:3200"));
         corsConfiguration.setExposedHeaders(List.of(ORIGIN, ACCESS_CONTROL_ALLOW_ORIGIN, CONTENT_TYPE, ACCEPT, AUTHORIZATION, X_REQUESTED_WITH, ACCESS_CONTROL_REQUEST_METHOD, ACCESS_CONTROL_REQUEST_HEADERS, ACCESS_CONTROL_ALLOW_CREDENTIALS));
         corsConfiguration.setAllowedMethods(List.of(GET.name(), POST.name(), PUT.name(), PATCH.name(), DELETE.name(), OPTIONS.name()));
+        corsConfiguration.setAllowCredentials(true);
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
         return new CorsFilter(urlBasedCorsConfigurationSource);
     }

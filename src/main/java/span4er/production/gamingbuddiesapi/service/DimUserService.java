@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -61,6 +62,10 @@ public class DimUserService {
 
     public DimUser getDimUser(String login) {
         return dimUserRepo.findByUsername(login).orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    public UserDetailsService userDetailsService() {
+        return this::getDimUser;
     }
 
     public DimUser createDimUser(DimUser dimUser) {

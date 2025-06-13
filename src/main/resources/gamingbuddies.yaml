@@ -411,7 +411,7 @@ paths:
       responses:
         '200':
           description: game information retrieved successfully
-    put:
+    post:
       summary: update details about game from library by id
       parameters:
         - name: id

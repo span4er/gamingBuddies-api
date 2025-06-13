@@ -20,12 +20,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GameSessionResource {
     private final GameSessionService gameSessionService;
-    private final DimGameRepo dimGameRepo;
-    private final DimGamingPlatformRepo dimGamingPlatformRepo;
-    private final DimUserRepo dimUserRepo;
-    private final DimGameSessionStatusRepo dimGameSessionStatusRepo;
-    private final DimSessionCategoryRepo dimSessionCategoryRepo;
-    private final DimSessionLanguagesRepo dimSessionLanguagesRepo;
 
     @GetMapping
     public ResponseEntity<Page<GameSessionInfoForSearch>> searchGameSessions(@RequestParam(value = "page", defaultValue = "0") int page,
@@ -42,25 +36,7 @@ public class GameSessionResource {
 
     @PostMapping()
     public ResponseEntity<Long> createGameSession(@RequestBody GameSessionDTO gameSession){
-        return ResponseEntity.ok().body(gameSessionService.createGameSession(convertToGameSession(gameSession)));
+        return ResponseEntity.ok().body(gameSessionService.createGameSession(gameSession));
     }
 
-    private GameSession convertToGameSession(GameSessionDTO gameSessionDTO){
-        GameSession gameSessionEntity = new GameSession();
-
-        gameSessionEntity.setGame(dimGameRepo.getReferenceById(String.valueOf(gameSessionDTO.getGameid())));
-        gameSessionEntity.setPlatform(dimGamingPlatformRepo.getReferenceById(gameSessionDTO.getPlatformid()));
-        gameSessionEntity.setCreateuser(dimUserRepo.getReferenceById(String.valueOf(gameSessionDTO.getCreateuserid())));
-        gameSessionEntity.setCreatedttm(LocalDateTime.now());
-        gameSessionEntity.setStartdttm(gameSessionDTO.getStartdttm());
-        gameSessionEntity.setEnddttm(gameSessionDTO.getEnddttm());
-        gameSessionEntity.setSessionstatus(dimGameSessionStatusRepo.getReferenceById(gameSessionDTO.getSessionstatusid()));
-        gameSessionEntity.setCapacitynum(gameSessionDTO.getCapacitynum());
-        gameSessionEntity.setCategory(dimSessionCategoryRepo.getReferenceById(gameSessionDTO.getCategoryid()));
-        gameSessionEntity.setLanguage(dimSessionLanguagesRepo.getReferenceById(gameSessionDTO.getLanguageid()));
-        gameSessionEntity.setSessiondescription(gameSessionDTO.getSessiondescription());
-        gameSessionEntity.setName(gameSessionDTO.getName());
-
-        return gameSessionEntity;
-    }
 }
