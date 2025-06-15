@@ -33,6 +33,16 @@ public class JwtService {
     }
 
     /**
+     * Извлечение имени пользователя из токена
+     *
+     * @param token токен
+     * @return имя пользователя
+     */
+    public String extractUserId(String token) {
+        return extractClaim(token, claims -> claims.get("userId").toString());
+    }
+
+    /**
      * Генерация токена
      *
      * @param userDetails данные пользователя
@@ -41,7 +51,7 @@ public class JwtService {
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         if (userDetails instanceof DimUser customUserDetails) {
-            claims.put("id", customUserDetails.getUserid());
+            claims.put("userId", customUserDetails.getUserid());
             claims.put("usertypeid", customUserDetails.getUsertypeId().getName());
         }
         return generateToken(claims, userDetails);
