@@ -19,10 +19,11 @@ import span4er.production.gamingbuddiesapi.service.DimUserService;
 
 import java.io.IOException;
 
+import static span4er.production.gamingbuddiesapi.constant.Constant.BEARER_PREFIX;
+
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    public static final String BEARER_PREFIX = "Bearer ";
     public static final String HEADER_NAME = "Authorization";
     private final JwtService jwtService;
     private final DimUserService userService;

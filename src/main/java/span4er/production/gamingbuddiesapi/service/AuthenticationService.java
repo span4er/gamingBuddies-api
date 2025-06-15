@@ -62,7 +62,7 @@ public class AuthenticationService {
                     .getDimUser(request.getUsername());
 
             var jwt = jwtService.generateToken(user);
-            return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+            return ResponseEntity.ok(new JwtAuthenticationResponse(jwt,user.getUsername()));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new JwtAuthenticationResponse(e.getMessage()));
         }
